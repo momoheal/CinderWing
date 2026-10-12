@@ -5,14 +5,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "tools" / "installer"
-DST = ROOT / "dist" / "小死亡之翼桌宠"
+DST = ROOT / "dist" / "CinderWing"
 
 assert DST.exists(), f"dist folder not found: {DST}"
 
 for f in SRC.iterdir():
     if not f.is_file():
         continue
-    text = f.read_text(encoding="utf-8").replace("\r\n", "\n")
+    # utf-8-sig：源文件无论是否带 BOM 都先剥掉，输出时统一只加一个 BOM，
+    # 否则双重 BOM 会让 PowerShell 把首行注释当成命令报错
+    text = f.read_text(encoding="utf-8-sig").replace("\r\n", "\n")
     out = DST / f.name
     if f.suffix == ".bat":
         out.write_bytes(text.replace("\n", "\r\n").encode("ascii"))

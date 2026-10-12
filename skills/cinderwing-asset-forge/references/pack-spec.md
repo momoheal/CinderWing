@@ -22,7 +22,7 @@
 
 - 每帧 256×256 透明 PNG，角色约 205px 高、脚底对齐画布底部留 18px。
 - packs 父目录（宠物右键「打开形象文件夹」就是这里）：
-  - 打包版：`%APPDATA%\GeoHarbourPet\packs`
+  - 打包版：`%APPDATA%\CinderWing\packs`
   - 开发态：`<仓库>\assets\packs`
 - 缺少某套动作时，程序自动用内置默认形象的同名动作顶上，不会崩。
 

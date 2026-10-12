@@ -49,7 +49,7 @@ for hit in hits:
     print(hit)
 
 # grab the widest short window near the pet top (the bubble)
-bub = [x for x in hits if x[3] > 200 and x[4] < 200 and x[5] != '小死亡之翼桌宠']
+bub = [x for x in hits if x[3] > 200 and x[4] < 200 and x[5] != 'CinderWing']
 if not bub:
     print("no bubble"); sys.exit(1)
 hwnd, x, y, w, h = bub[0][:5]

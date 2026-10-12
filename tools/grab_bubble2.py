@@ -41,7 +41,7 @@ user32.EnumWindows(EnumProc(cb), 0)
 for h in hits:
     print(h)
 
-target = [x for x in hits if x[5] != "小死亡之翼桌宠"]
+target = [x for x in hits if x[5] != "CinderWing"]
 if not target:
     print("no bubble window")
     sys.exit(1)

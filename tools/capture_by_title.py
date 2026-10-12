@@ -6,7 +6,7 @@ from PIL import Image
 
 user32 = ctypes.windll.user32
 gdi32 = ctypes.windll.gdi32
-TITLE = "小死亡之翼桌宠"
+TITLE = "CinderWing"
 out = sys.argv[1] if len(sys.argv) > 1 else "tools/_m4_pet.png"
 
 hwnd_found = []

@@ -64,7 +64,7 @@ class PetWindow(QWidget):
         self.setAttribute(Qt.WA_ShowWithoutActivating)
         self.setFocusPolicy(Qt.NoFocus)
         self.setFixedSize(PET_SIZE, PET_SIZE)
-        self.setWindowTitle("小死亡之翼桌宠")
+        self.setWindowTitle("CinderWing")
 
         self.sfx = sfx
         self.bubble = None  # 由 main 注入（任务通知气泡）

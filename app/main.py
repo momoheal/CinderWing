@@ -34,7 +34,7 @@ def setup_logging():
 
 def already_running() -> bool:
     """单实例保护：同名互斥量已存在说明宠物已在运行。"""
-    mutex_name = "Global\\GeoHarbourPet_SingleInstance_v1"
+    mutex_name = "Global\\CinderWing_SingleInstance_v1"
     kernel32 = ctypes.windll.kernel32
     handle = kernel32.CreateMutexW(None, False, mutex_name)
     return kernel32.GetLastError() == 183  # ERROR_ALREADY_EXISTS

@@ -17,7 +17,7 @@ def find_pet():
         if user32.IsWindowVisible(hwnd):
             t = ctypes.create_unicode_buffer(256)
             user32.GetWindowTextW(hwnd, t, 256)
-            if t.value == "小死亡之翼桌宠":
+            if t.value == "CinderWing":
                 r = wintypes.RECT()
                 user32.GetWindowRect(hwnd, ctypes.byref(r))
                 rect = (r.left, r.top, r.right, r.bottom)

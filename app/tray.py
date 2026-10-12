@@ -80,7 +80,7 @@ def build_tray_icon(app, window, sfx, bubble=None) -> QSystemTrayIcon:
 
     icon = QSystemTrayIcon(_make_tray_icon_image(), parent=app)
     icon.setContextMenu(menu)
-    icon.setToolTip("小死亡之翼桌宠")
+    icon.setToolTip("CinderWing")
     icon.activated.connect(
         lambda reason: toggle_visibility()
         if reason == QSystemTrayIcon.DoubleClick else None

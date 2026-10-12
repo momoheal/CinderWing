@@ -14,7 +14,7 @@ def cb(h, l):
     global hwnd
     s = ctypes.create_unicode_buffer(256)
     u.GetWindowTextW(h, s, 256)
-    if s.value == "小死亡之翼桌宠":
+    if s.value == "CinderWing":
         hwnd = h
     return True
 

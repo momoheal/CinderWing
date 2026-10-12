@@ -60,7 +60,7 @@ WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, wintypes.HWND, wintypes.LPARAM)
 def cb(h, l):
     t = ctypes.create_unicode_buffer(256)
     user32.GetWindowTextW(h, t, 256)
-    if user32.IsWindowVisible(h) and t.value == "小死亡之翼桌宠":
+    if user32.IsWindowVisible(h) and t.value == "CinderWing":
         others.append((h, t.value))
         global pet_hwnd
         pet_hwnd = h

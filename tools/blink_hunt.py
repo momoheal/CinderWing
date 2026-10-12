@@ -17,7 +17,7 @@ def cb(hwnd, l):
     if user32.IsWindowVisible(hwnd):
         t = ctypes.create_unicode_buffer(256)
         user32.GetWindowTextW(hwnd, t, 256)
-        if t.value == "小死亡之翼桌宠":
+        if t.value == "CinderWing":
             pet_hwnd = hwnd
     return True
 

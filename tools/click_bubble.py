@@ -31,7 +31,7 @@ def cb(hwnd, l):
         if cls.value.startswith("Qt") and w0 > 200 and h0 < 320:
             title = ctypes.create_unicode_buffer(256)
             user32.GetWindowTextW(hwnd, title, 256)
-            if title.value != "小死亡之翼桌宠":
+            if title.value != "CinderWing":
                 hits.append((hwnd, r.left, r.top, w0, h0))
     return True
 

@@ -37,7 +37,7 @@ def pump(ms=50):
 
 # 1) WAITING 任务（有真实会话 id）：点收起状态的气泡应直接请求跳转
 bubble.notify("WAITING", "需要你决策：测试任务", "t1", "测试任务", 30,
-              "38446069288761602", None)
+              "12345678901234568", None)
 pump()
 bubble.grab()  # 强制走一遍 paintEvent
 assert bubble.tasks["t1"].jumpable
@@ -49,9 +49,9 @@ print("OK 1: WAITING 气泡单击 -> jump_requested(t1)")
 # 2) 普通 PROGRESS 气泡：单击应展开面板，不跳转
 calls.clear()
 bubble.notify("PROGRESS", "任务进行中：测试任务", "t1", "测试任务", 40,
-              "38446069288761602", None)
+              "12345678901234568", None)
 bubble.notify("PROGRESS", "任务进行中：另一个", "t2", "另一个任务", 55,
-              "38444948096752642", None)
+              "12345678901234567", None)
 pump()
 QTest.mouseClick(bubble, Qt.LeftButton, Qt.NoModifier, QPoint(30, 30))
 pump()
@@ -84,7 +84,7 @@ print("OK 4: 无会话 id 的任务行点击不跳转")
 
 # 5) 激活器：假 id 被拒绝，数字 id 在 SIMULATE 下只记录
 assert activator.activate_conversation("demo-task-a") is False
-assert activator.activate_conversation("38446069288761602") is True
+assert activator.activate_conversation("12345678901234568") is True
 print("OK 5: 激活器 id 校验与 SIMULATE 行为正确")
 
 print("\n全部通过 ✔")

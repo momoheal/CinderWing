@@ -4,10 +4,13 @@
 > 它还盯着**豆包工作（Doubao Work）**里的异步任务——任务开始、推进、需要你决策、完成，
 > 都会像 OpenAI Codex Pets 那样用文字气泡明确汇报，点一下就能跳回对应会话。
 
-![小龙待机](docs/images/pet-m4.png)
-![右键菜单](docs/images/m5-context-menu.png)
+![小烬翼](docs/images/m7-pet-hero.png)
+![右键菜单](docs/images/m7-context-menu.png)
+![更换形象](docs/images/m7-skin-menu.png)
 ![决策选项气泡](docs/images/m5-ask-bubble.png)
 ![多任务进度面板](docs/images/m3-task-panel.png)
+
+> English documentation: [README.en.md](README.en.md)
 
 - 当前版本：**v1.2.0（M6：角色换装 + 形象工坊技能）**
 - 技术栈：Python 3.13 · PySide6（透明无边框置顶窗口）· rembg/u2net（AI 抠像）· ccl_chromium_reader（IndexedDB 读取）· PyInstaller（打包）
@@ -17,7 +20,7 @@
 
 ## 功能一览
 
-**桌面演出（对标炉石收藏宠物）**
+**桌面演出（收藏式桌宠的互动密度）**
 - 闲置时极轻微的腹式呼吸、偶尔眨眼、偶尔挠痒；长时间不理它会蜷起来睡觉（带起伏，点击唤醒）
 - 点头部喷火、点身体扑咬、开心欢呼、打哈欠等点击反应；可拖拽，被拎起时缓慢晃动，松手会晕一下
 - 52 帧 2D 序列帧（AI 生成 + 语义分割抠像 + 程序化加工），5 个音效，可一键静音
@@ -106,8 +109,8 @@ python -m venv .venv
 tools\build_exe.bat
 ```
 
-产物在 `dist\小死亡之翼桌宠\`，双击 exe 即跑；`tools\installer\开机自启-安装.bat`
-双击一次即可开机自启。打包后日志与配置写在 `%APPDATA%\GeoHarbourPet\`。
+产物在 `dist\CinderWing\`，双击 exe 即跑；`tools\installer\开机自启-安装.bat`
+双击一次即可开机自启。打包后日志与配置写在 `%APPDATA%\CinderWing\`。
 
 ### 重新生成动画帧（可选）
 
@@ -139,7 +142,7 @@ $env:U2NET_HOME = "$PWD\tools\.u2net"
   --id my-pet --name "我的宠物" --author "名字"
 ```
 
-产物自动进入形象文件夹（开发态 `assets/packs/`，打包版 `%APPDATA%\GeoHarbourPet\packs\`），
+产物自动进入形象文件夹（开发态 `assets/packs/`，打包版 `%APPDATA%\CinderWing\packs\`），
 右键菜单即可切换；同时生成品红底质检图 `qa_my-pet.png` 供逐帧验收。
 角色包结构详见 [`skills/cinderwing-asset-forge/references/pack-spec.md`](skills/cinderwing-asset-forge/references/pack-spec.md)。
 
@@ -187,13 +190,27 @@ $env:QT_QPA_PLATFORM = "offscreen"
 
 ---
 
-## 隐私与版权说明
+## 隐私、商标与许可证
 
-- **纯本地运行**：程序只读取本机豆包工作的本地数据库与通过系统协议打开会话，
-  不含任何自建服务端，不收集、不上报任何数据。
-- **私有数据不入库**：本地数据库快照、任务 dump（可能含聊天内容）位于
-  `tools/_m2work/` 与临时目录，已被 `.gitignore` 排除，不会提交。
-- **美术资源仅供个人学习自用**：角色形象参考暴雪《魔兽世界》小死亡之翼 /
-  《炉石传说》收藏宠物风格，相关形象版权归原权利人所有。
-  本仓库不公开分发、不商用、不用于任何对外发布；如需公开请先替换为原创角色素材。
-- 第三方组件 ccl_chromium_reader 遵循其自身许可证（见其仓库说明）。
+**隐私（纯本地、只读）**
+
+- 程序只读取本机豆包工作客户端的本地数据库快照，并通过系统协议打开会话；
+  不含任何自建服务端，不收集、不上报任何数据，**全程不向客户端数据库写入内容**。
+- 本地数据库快照、任务 dump（可能含聊天内容）位于 `tools/_m2work/` 与临时目录，
+  已被 `.gitignore` 排除，不会提交。
+
+**商标与非官方声明**
+
+- CinderWing（小烬翼）是个人开源学习项目，**与字节跳动、豆包/Doubao Work
+  没有任何关联、背书或认证关系**；名称"豆包工作"等商标归其各自权利人所有。
+- 本项目不包含任何第三方受版权保护的游戏角色素材；默认形象"小烬翼"
+  为原创 Q 版黑红幼龙。若你用形象工坊制作了其他角色的形象包，请自行确认
+  版权合规，不要公开分发侵权资产。
+
+**许可证**
+
+- 程序源代码：**MIT License**（见 [LICENSE](LICENSE)）。
+- 美术、音频等创意资产（`assets/`、`docs/images/`）：
+  **CC BY-NC 4.0**（署名-非商业，见 [assets/LICENSE](assets/LICENSE)）。
+- 第三方组件 ccl_chromium_reader 遵循其自身许可证（见其仓库说明）；
+  PySide6 遵循 LGPL/商业许可，PyInstaller 输出请遵循其相应条款。

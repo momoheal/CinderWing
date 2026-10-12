@@ -12,7 +12,7 @@
 
 - 内置默认形象随程序发布（assets/frames，id=cinderwing）。
 - 用户自己的角色包放在可写数据目录的 packs/ 下：
-    打包态 = %APPDATA%\\GeoHarbourPet\\packs
+    打包态 = %APPDATA%\\CinderWing\\packs
     开发态 = 项目 assets/packs
 - 某套动作缺失时自动回退用默认形象的同名动作，保证角色包可以"先做几套"。
 """

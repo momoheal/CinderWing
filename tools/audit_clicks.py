@@ -23,7 +23,7 @@ hwnd_holder = {}
 def find(h, l):
     t = ctypes.create_unicode_buffer(256)
     user32.GetWindowTextW(h, t, 256)
-    if user32.IsWindowVisible(h) and t.value == "小死亡之翼桌宠":
+    if user32.IsWindowVisible(h) and t.value == "CinderWing":
         hwnd_holder["h"] = h
     return True
 

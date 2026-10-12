@@ -34,8 +34,7 @@
 | `capture_by_title.py` | 按窗口标题抓打包版宠物 |
 | `grab_bubble2.py` | 按进程抓全部 Qt 窗口（含高气泡，M5 推荐） |
 | `grab_bubble.py` | 旧版抓气泡（高度 <200 会漏，已被 2 代取代） |
-| `_m5_shot_menu.py` / `_m5_shot_submenu.py` | 真机右键菜单/子菜单抓拍 |
-| `bubble_preview.py` | 气泡离屏预览 |
+| `_m5_shot_menu.py` / `_m5_shot_submenu.py` / `_m6_shot_skin.py` | 真机右键菜单/子菜单抓拍 |
 
 ## 数据源排障（M2 相关）
 

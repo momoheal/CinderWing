@@ -99,7 +99,7 @@ class DoubaoTaskSource(QObject):
         self.on_event = on_event
         self.on_progress = on_progress
         self._work_root = pathlib.Path(tempfile.gettempdir()) / \
-            "geoharbour_pet_idb"
+            "cinderwing_idb"
         # 清掉旧版本（每轮固定目录时代）可能残留的 leveldb/blob
         for legacy in ("leveldb", "blob"):
             shutil.rmtree(self._work_root / legacy, ignore_errors=True)

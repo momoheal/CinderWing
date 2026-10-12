@@ -1,0 +1,19 @@
+# 美术与音频资产许可（Art & Audio License）
+
+本目录下的创意资产（`assets/frames/`、`assets/sheets/`、`assets/core/`、
+`assets/sfx/`、`assets/app.ico`，以及文档 `docs/images/` 中的截图）
+采用 **知识共享 署名-非商业性使用 4.0 国际许可协议（CC BY-NC 4.0）** 授权。
+
+- 署名（BY）：转载、改编、制作衍生形象时，请保留作者署名
+  **momoheal** 并注明来源仓库 https://github.com/momoheal/CinderWing
+  及所做修改。
+- 非商业（NC）：不得将这些资产用于商业目的。
+- 仓库的**程序源代码**另行采用 MIT 许可证（见根目录 `LICENSE`）。
+- 你用本项目工具（`tools/pack_build.py`、形象工坊技能）自行生成的
+  角色包资产，著作权归你自己所有，不受本许可约束。
+
+完整协议文本：
+https://creativecommons.org/licenses/by-nc/4.0/legalcode.zh-hans
+（英文）https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Copyright (c) 2026 momoheal

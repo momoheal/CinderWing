@@ -1,13 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
-"""小死亡之翼桌宠打包配置（onedir，无控制台窗口）。
+"""CinderWing打包配置（onedir，无控制台窗口）。
 
 构建：.venv\\Scripts\\python.exe -m PyInstaller --clean -y pet.spec
-产物：dist\\小死亡之翼桌宠\\小死亡之翼桌宠.exe
+产物：dist\\CinderWing\\CinderWing.exe
 """
 from PyInstaller.utils.hooks import collect_all
 
 # 运行时只读资源（注意：config.json 不打包，它是可写的位置记忆，
-# 打包后写到 %APPDATA%\\GeoHarbourPet）
+# 打包后写到 %APPDATA%\\CinderWing）
 datas = [
     ('assets/frames', 'assets/frames'),
     ('assets/sfx', 'assets/sfx'),
@@ -48,7 +48,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='小死亡之翼桌宠',
+    name='CinderWing',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -63,5 +63,5 @@ coll = COLLECT(
     a.datas,
     strip=False,
     upx=False,
-    name='小死亡之翼桌宠',
+    name='CinderWing',
 )

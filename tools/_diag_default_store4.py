@@ -6,8 +6,8 @@ from pathlib import Path
 from ccl_chromium_reader.ccl_chromium_indexeddb import (
     WrappedIndexDB, IndexedDb, IdbKey, _le_varint_from_bytes)
 
-ld = Path(r"C:\Users\admin\AppData\Local\Temp\geoharbour_pet_idb\leveldb")
-bl = Path(r"C:\Users\admin\AppData\Local\Temp\geoharbour_pet_idb\blob")
+ld = Path(r"C:\Users\admin\AppData\Local\Temp\cinderwing_idb\leveldb")
+bl = Path(r"C:\Users\admin\AppData\Local\Temp\cinderwing_idb\blob")
 w = WrappedIndexDB(ld, bl)
 raw = w._raw_db
 

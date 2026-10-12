@@ -114,7 +114,7 @@ ASK = {"questions": [{
 
 # 1) WAITING + 选项：渲染出 3 个选项按钮 + 1 个自定义回答按钮
 bubble.notify("WAITING", "需要你确认：如何处理这 12 个重复素材？",
-              "t1", "整理素材", 30, "38446069288761602", None, ask=ASK)
+              "t1", "整理素材", 30, "12345678901234568", None, ask=ASK)
 pump()
 bubble.grab()
 assert len(bubble._opt_rects) == 4, f"应有 4 个按钮，实际 {len(bubble._opt_rects)}"
@@ -135,7 +135,7 @@ print("OK 3: 点选项按钮 -> jump_requested(t1)")
 # 4) 自由文本题（无 options）：渲染一个“打开豆包输入回答”按钮
 bubble2 = Bubble(FakePetWindow(None))
 bubble2.notify("WAITING", "请描述你看到的跳转结果", "t2", "深链测试",
-               None, "38444948096752642", None,
+               None, "12345678901234567", None,
                ask={"questions": [{
                    "title": "请描述你看到的跳转结果",
                    "type": 3, "options": [], "allow_text": True}]})
@@ -148,7 +148,7 @@ print("OK 4: 自由文本题渲染单一“去豆包回答”按钮")
 bubble3 = Bubble(FakePetWindow(None))
 assert bubble3.show_panel() is False
 bubble3.notify("PROGRESS", "进行中", "x", "任务X", 20,
-               "38444948096752642", None)
+               "12345678901234567", None)
 pump()
 assert bubble3.show_panel() is True and bubble3._expanded
 print("OK 5: show_panel 空态 False / 有任务展开面板")
