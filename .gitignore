@@ -33,3 +33,7 @@ third_party/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# ===== 调试期截屏/渲染图（正式截图放 docs/images/）=====
+tools/_*.png
+tools/_*.jpg

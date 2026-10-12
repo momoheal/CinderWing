@@ -11,6 +11,7 @@ from PyInstaller.utils.hooks import collect_all
 datas = [
     ('assets/frames', 'assets/frames'),
     ('assets/sfx', 'assets/sfx'),
+    ('skills', 'skills'),  # M6：一键导入的「桌宠形象工坊」技能包
 ]
 binaries = []
 hiddenimports = ['PySide6.QtMultimedia']

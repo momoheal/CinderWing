@@ -17,20 +17,16 @@
 - DONE → happy 开心庆祝
 - FAIL → drag 晕倒帧
 """
-import json
 import logging
 import math
-import os
 import random
 
 from PySide6.QtCore import Qt, QPoint, QRect, QTimer
-from PySide6.QtGui import QAction, QPainter
+from PySide6.QtGui import QAction, QActionGroup, QPainter
 from PySide6.QtWidgets import QApplication, QMenu, QWidget
 
-from app import paths
+from app import config_store, packs as packs_mod, skill_import
 from app.sprite_anim import SpritePlayer
-
-CONFIG_PATH = paths.config_path()
 
 PET_SIZE = 240           # 窗口边长（逻辑像素）
 DRAG_THRESHOLD = 6       # 鼠标移动超过这个距离才算拖拽，否则算点击
@@ -244,7 +240,9 @@ class PetWindow(QWidget):
             self._drop_timer.start(FAIL_DIZZY_MS)
 
     # ---------- 右键菜单 ----------
-    def contextMenuEvent(self, event):
+    def _build_context_menu(self) -> tuple[QMenu, dict]:
+        """构建右键菜单。返回 (menu, handlers)，handlers 把 QAction 映射到
+        处理函数；拆出来是为了离屏测试也能校验菜单结构。"""
         menu = QMenu(self)
         menu.setStyleSheet(
             "QMenu{background:#2b2b30;color:#f0f0f2;border:1px solid #4a4a52;"
@@ -253,43 +251,61 @@ class PetWindow(QWidget):
             "QMenu::item:selected{background:#c0392b;}"
             "QMenu::separator{height:1px;background:#4a4a52;margin:4px 8px;}")
 
+        handlers = {}
         act_progress = menu.addAction("任务进度（多任务面板）")
+        handlers[act_progress] = self._open_progress_panel
 
         m_play = menu.addMenu("逗逗它")
-        act_fire = m_play.addAction("喷火")
-        act_bite = m_play.addAction("扑咬")
-        act_happy = m_play.addAction("开心欢呼")
-        act_sleep = m_play.addAction("去睡觉")
+        for text, fn in (("喷火", lambda: self._manual_play("tap1")),
+                         ("扑咬", lambda: self._manual_play("tap2")),
+                         ("开心欢呼", lambda: self._manual_play("happy")),
+                         ("去睡觉", self._sleep_from_menu)):
+            act = m_play.addAction(text)
+            handlers[act] = fn
+
+        m_skin = menu.addMenu("更换形象")
+        skin_group = QActionGroup(m_skin)
+        skin_group.setExclusive(True)
+        current = packs_mod.selected_id()
+        for pack in packs_mod.list_packs():
+            label = pack.name + ("（内置）" if pack.is_builtin else "")
+            act = QAction(label, m_skin)
+            act.setCheckable(True)
+            act.setChecked(pack.id == current)
+            skin_group.addAction(act)
+            m_skin.addAction(act)
+            handlers[act] = lambda pid=pack.id: self._switch_pack(pid)
+        m_skin.addSeparator()
+        act_open_packs = m_skin.addAction("打开形象文件夹")
+        act_make_skin = m_skin.addAction("制作新形象（导入生成技能）…")
+        handlers[act_open_packs] = skill_import.open_packs_folder
+        handlers[act_make_skin] = self._make_new_skin
+        menu._skin_submenu = m_skin  # 供测试/外部读取
 
         menu.addSeparator()
         act_sound = QAction("音效开关", menu)
         act_sound.setCheckable(True)
         act_sound.setChecked(bool(self.sfx and self.sfx.enabled))
+        if self.sfx is not None:
+            handlers[act_sound] = lambda: setattr(
+                self.sfx, "enabled", act_sound.isChecked())
         menu.addAction(act_sound)
         menu.addSeparator()
         act_hide = menu.addAction("隐藏宠物（托盘恢复）")
         act_quit = menu.addAction("退出")
+        handlers[act_hide] = self.hide
+        handlers[act_quit] = QApplication.instance().quit
+        return menu, handlers
 
+    def _sleep_from_menu(self):
+        self._long_pressed = True
+        self._enter_sleep()
+
+    def contextMenuEvent(self, event):
+        menu, handlers = self._build_context_menu()
         chosen = menu.exec(event.globalPos())
-        if chosen is None:
-            return
-        if chosen is act_progress:
-            self._open_progress_panel()
-        elif chosen is act_fire:
-            self._manual_play("tap1")
-        elif chosen is act_bite:
-            self._manual_play("tap2")
-        elif chosen is act_happy:
-            self._manual_play("happy")
-        elif chosen is act_sleep:
-            self._long_pressed = True
-            self._enter_sleep()
-        elif chosen is act_sound and self.sfx is not None:
-            self.sfx.enabled = act_sound.isChecked()
-        elif chosen is act_hide:
-            self.hide()
-        elif chosen is act_quit:
-            QApplication.instance().quit()
+        if chosen is not None and chosen in handlers:
+            handlers[chosen]()
 
     def _open_progress_panel(self):
         if self.bubble is not None and self.bubble.show_panel():
@@ -300,6 +316,41 @@ class PetWindow(QWidget):
         if self.bubble is not None:
             self.bubble.notify("DONE", "现在没有进行中的任务，小龙在待命",
                                key="menu-idle", name="小龙", progress=100)
+
+    # ---------- 更换形象 ----------
+    def _switch_pack(self, pack_id: str):
+        pack = packs_mod.get_pack(pack_id)
+        self.player.set_pack(pack)
+        packs_mod.set_selected(pack_id)
+        if self.sfx:
+            self.sfx.play("click")
+        # 换装后无论在睡觉还是放动作，都回到新形象的待机
+        self._sleeping = False
+        self._drop_timer.stop()
+        self._enter_rest()
+        if self.bubble is not None:
+            self.bubble.notify(
+                "DONE", f"已换上新形象：{pack.name}",
+                key="skin-switched", name="形象工坊", progress=100)
+
+    def _make_new_skin(self):
+        """把生成技能导入豆包工作，再打开形象文件夹并唤起客户端。"""
+        ok, info = skill_import.import_skill()
+        skill_import.open_packs_folder()
+        skill_import.bring_doubao_to_front()
+        if self.bubble is not None:
+            if ok:
+                self.bubble.notify(
+                    "WAITING",
+                    "形象工坊技能已导入豆包工作。请在豆包工作里上传角色概念图，"
+                    "并说「用桌宠形象工坊生成新形象」；做好的角色包放进刚打开的 "
+                    "packs 文件夹后，回这里右键「更换形象」即可。",
+                    key="skin-make", name="形象工坊", progress=10)
+            else:
+                self.bubble.notify(
+                    "FAIL", f"技能自动导入失败：{info}（可手动把仓库 skills 目录"
+                            "复制到豆包工作的 .user_skills）",
+                    key="skin-make-fail", name="形象工坊", progress=100)
 
     def _manual_play(self, name):
         """右键菜单里手动触发的互动动作。"""
@@ -400,8 +451,8 @@ class PetWindow(QWidget):
     # ---------- 位置记忆 ----------
     def _place_initial(self):
         try:
-            with open(CONFIG_PATH, encoding="utf-8") as f:
-                x, y = json.load(f)["pos"]
+            pos = config_store.get("pos")
+            x, y = pos
             self.move(x, y)
             return
         except Exception:
@@ -411,9 +462,7 @@ class PetWindow(QWidget):
                   screen.bottom() - self.height() + 1)
 
     def _save_pos(self):
-        os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
-        with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-            json.dump({"pos": [self.x(), self.y()]}, f)
+        config_store.update(pos=[self.x(), self.y()])
 
     # ---------- 关闭收托盘 ----------
     def closeEvent(self, event):

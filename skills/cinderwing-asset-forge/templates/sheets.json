@@ -1,0 +1,18 @@
+{
+  "idle":    {"file": "idle.png", "cells": 8},
+  "blink":   {"file": "blink.png", "cells": 5},
+  "tap1": [
+    {"file": "tap1_a.png", "cells": 3},
+    {"file": "tap1_b.png", "cells": 3},
+    {"file": "tap1_c.png", "cells": 2}
+  ],
+  "tap2":    {"file": "tap2.png", "cells": 5},
+  "tap3":    {"file": "tap3.png", "cells": 7},
+  "drag": [
+    {"file": "drag_a.png", "cells": 3},
+    {"file": "drag_b.png", "cells": 3}
+  ],
+  "happy":   {"file": "happy.png", "cells": 3},
+  "talk":    {"file": "talk.png", "cells": 9},
+  "scratch": {"file": "scratch.png", "cells": 4}
+}

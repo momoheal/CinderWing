@@ -9,7 +9,7 @@
 ![决策选项气泡](docs/images/m5-ask-bubble.png)
 ![多任务进度面板](docs/images/m3-task-panel.png)
 
-- 当前版本：**v1.1.0（M5）**
+- 当前版本：**v1.2.0（M6：角色换装 + 形象工坊技能）**
 - 技术栈：Python 3.13 · PySide6（透明无边框置顶窗口）· rembg/u2net（AI 抠像）· ccl_chromium_reader（IndexedDB 读取）· PyInstaller（打包）
 - 平台：Windows 10/11（本机自用，单实例驻留 + 托盘 + 开机自启）
 
@@ -32,6 +32,13 @@
 **桌面控制（v1.1.0）**
 - 宠物右键菜单：任务进度、逗逗它（喷火/扑咬/开心欢呼/去睡觉）、音效开关、隐藏宠物、退出
 - 托盘菜单同步；双击托盘切换显隐；支持开机自启
+
+**更换形象（v1.2.0）**
+- 角色包插件化：每只宠物是 `packs/<id>/` 下的一个文件夹（9 套动作帧 + pack.json），缺动作自动回退内置形象
+- 右键「更换形象」即时切换，选择持久化；「打开形象文件夹」可放入下载的第三方形象包
+- **形象工坊技能**：右键「制作新形象（导入生成技能）…」一键把 AI 生图技能导入豆包工作；
+  之后上传一张角色概念图，AI 即按桌宠需要的 9 套动作规范生成青蓝底条图，
+  并调用 `tools/pack_build.py` 自动抠像、切帧、品红底质检、打包成可切换的角色包
 
 ---
 
@@ -57,10 +64,13 @@
 │  ├─ sheets/            # AI 生成的原始条图（美术流水线输入，可替换/增补）
 │  └─ app.ico            # 程序图标
 ├─ tools/                # 构建、测试、截图、排障脚本（见 tools/README.md）
-│  ├─ build_frames.py    # 美术流水线：条图 → 成品帧
+│  ├─ build_frames.py    # 内置小龙美术流水线：条图 → 成品帧
+│  ├─ pack_build.py      # M6 通用角色包构建器：任意角色条图 → 可换装角色包
 │  ├─ build_exe.bat      # 一键打包
 │  ├─ installer/         # 开机自启安装/卸载
 │  └─ test_*.py          # 自动化测试
+├─ skills/               # 随程序分发的 AI 技能
+│  └─ cinderwing-asset-forge/  # 桌宠形象工坊（概念图 → 全套动画资产）
 ├─ docs/                 # 每个里程碑的白话讲解（零基础向）+ 外部 AI 生图需求单
 ├─ pet.spec              # PyInstaller 配置
 ├─ requirements.txt      # 运行依赖
@@ -112,6 +122,27 @@ $env:U2NET_HOME = "$PWD\tools\.u2net"
 
 u2net 模型（约 176MB）不随仓库提供，首次运行 rembg 会自动下载到 `tools/.u2net/`。
 
+### 制作 / 安装新形象（角色包）
+
+**方式一：形象工坊技能（推荐）**——右键宠物 →「更换形象」→
+「制作新形象（导入生成技能）…」，然后在豆包工作的新会话里上传角色概念图，
+说"用桌宠形象工坊生成新形象"即可。规范与流程见
+[`skills/cinderwing-asset-forge/`](skills/cinderwing-asset-forge/)。
+
+**方式二：手动构建**——准备 9 套动作的青蓝底条图（规范见
+[`skills/cinderwing-asset-forge/references/animation-brief.md`](skills/cinderwing-asset-forge/references/animation-brief.md)），
+放进一个文件夹并写好 `sheets.json`（模板在 `skills/.../templates/`），然后：
+
+```powershell
+$env:U2NET_HOME = "$PWD\tools\.u2net"
+.\.venv\Scripts\python.exe tools\pack_build.py .\我的条图 `
+  --id my-pet --name "我的宠物" --author "名字"
+```
+
+产物自动进入形象文件夹（开发态 `assets/packs/`，打包版 `%APPDATA%\GeoHarbourPet\packs\`），
+右键菜单即可切换；同时生成品红底质检图 `qa_my-pet.png` 供逐帧验收。
+角色包结构详见 [`skills/cinderwing-asset-forge/references/pack-spec.md`](skills/cinderwing-asset-forge/references/pack-spec.md)。
+
 ---
 
 ## 它是怎么知道任务状态的？
@@ -142,11 +173,13 @@ u2net 模型（约 176MB）不随仓库提供，首次运行 rembg 会自动下�
 | M3 | 通知气泡、进度条、多任务面板、deep-link 跳转 | [M3讲解.md](docs/M3讲解.md) |
 | M4 | PyInstaller 打包、开机自启（v1.0.0） | [M4讲解.md](docs/M4讲解.md) |
 | M5 | 右键菜单、决策选项按钮、blob 解析修复（v1.1.0） | [M5讲解.md](docs/M5讲解.md) |
+| M6 | 角色包换装、通用构建器、形象工坊技能（v1.2.0） | [M6讲解.md](docs/M6讲解.md) |
 
 测试：
 
 ```powershell
 $env:QT_QPA_PLATFORM = "offscreen"
+.\.venv\Scripts\python.exe tools\test_m6_packs.py
 .\.venv\Scripts\python.exe tools\test_m5_menu_ask.py
 .\.venv\Scripts\python.exe tools\test_m3_jump.py
 .\.venv\Scripts\python.exe tools\_test_source_once.py

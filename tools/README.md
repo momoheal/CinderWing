@@ -7,6 +7,7 @@
 | 脚本 | 用途 |
 |---|---|
 | `build_frames.py` | 美术流水线 v0.8：把 `assets/sheets/` 的 AI 条图抠像、切帧、程序化加工，输出到 `assets/frames/` |
+| `pack_build.py` | **M6 通用角色包构建器**：任意角色的条图文件夹 → 抠像切帧 → 可换装角色包（见 `skills/cinderwing-asset-forge/`） |
 | `_make_tap3.py` | 生成 tap3（哈欠→睡眠）帧的前置脚本，build_frames 前先跑 |
 | `make_icon.py` | 生成 `assets/app.ico`（16–256 多尺寸） |
 | `make_sounds.py` | 生成 `assets/sfx/` 的 5 个音效 |
@@ -18,6 +19,7 @@
 
 | 脚本 | 用途 |
 |---|---|
+| `test_m6_packs.py` | M6 离屏测试：角色包扫描/切换/回退/fps/菜单结构（19 项） |
 | `test_m5_menu_ask.py` | M5 离屏测试：右键菜单、决策选项气泡（7 项） |
 | `test_m3_jump.py` | M3 离屏测试：气泡/面板点击跳转（5 项） |
 | `_test_source_once.py` | M2 数据源离线回归：快照 → 读任务 → 打印状态 |
