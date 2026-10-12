@@ -1,0 +1,35 @@
+# ===== Python =====
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# ===== 打包产物（双击 build_exe.bat 重新生成）=====
+build/
+dist/
+*.zip
+*.spec.bak
+
+# ===== AI 抠图模型（约 176MB，不入库；见 docs/外部AI生图需求单.md 与 tools/README.md）=====
+tools/.u2net/
+
+# ===== 私有数据：本地 IndexedDB 快照 / 任务 dump（含聊天内容，严禁外传）=====
+tools/_m2work/
+%TEMP%/
+
+# ===== 运行期产物 =====
+*.log
+debug.log
+assets/config.json
+assets/pet.log
+
+# ===== 第三方源码参考副本（pip 从 GitHub 安装，无需入库）=====
+third_party/
+
+# ===== 临时/杂项 =====
+*.tmp
+*.bak
+*.pyc
+.DS_Store
+Thumbs.db
